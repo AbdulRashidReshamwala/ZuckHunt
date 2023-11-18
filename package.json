@@ -1,0 +1,30 @@
+{
+  "name": "zuck_hunt_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@waku/core": "^0.0.25",
+    "@waku/sdk": "^0.0.21",
+    "body-parser": "^1.20.2",
+    "circomlib": "^2.0.5",
+    "circomlibjs": "^0.1.7",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.11.0",
+    "snarkjs": "^0.7.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "build/*",
+      "circuits/*"
+    ]
+  }
+}
