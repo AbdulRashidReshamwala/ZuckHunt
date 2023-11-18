@@ -1,5 +1,0 @@
-pragma circom 2.0.0;
-
-include "./location.circom";
-
-component main = AssertFixedLocation(${data.lat1}, ${data.lon1}, ${data.lat2}, ${data.lon2});
