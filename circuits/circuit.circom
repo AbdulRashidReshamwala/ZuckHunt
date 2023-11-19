@@ -25165,11 +25165,11 @@ template Poseidon(nInputs) {
 }
 
 template GeoPoseHasher() {
-    signal input in[16];
+    signal input in[14];
     signal input hash;
     signal output out;
     
-    component poseidon = Poseidon(16);
+    component poseidon = Poseidon(14);
     poseidon.inputs <== in;
     hash === poseidon.out;
     out <-- hash;
