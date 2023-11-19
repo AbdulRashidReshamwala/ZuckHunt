@@ -13,6 +13,10 @@ const app = express()
 const port = 3000
 app.use(cors())
 app.use(bodyParser.json())
+const privateKey = process.env.PK;
+const lineaProvider = 'https://linea-goerli.infura.io/v3/75d20dcf6d4c4ad294404cdcd6c5408e';
+const provider = new ethers.providers.JsonRpcProvider(lineaProvider);
+
 
 
 app.post('/', async (req, res) => {
@@ -20,6 +24,22 @@ app.post('/', async (req, res) => {
     const poseidon = await circomlibjs.buildPoseidon();
     const hash = poseidon.F.toString(poseidon(data));
     res.json({ data: hash });
+
+})
+
+app.get('/data', async (req, res) => {
+    const contractAddress = "0xF989741E4A965A16a4606161E52aE98c78E440b4";
+    const ownerAccount = new ethers.Wallet(privateKey, provider);
+    const myContract = new ethers.Contract(contractAddress, ABI, ownerAccount);
+    const balance = await myContract.balanceOf("0x237ae8ff0815AED78d8A76c1267Bb1922492d4D7")
+    console.log('My nfts', balance)
+    const list = []
+    for (let i = 0; i < balance; i++) {
+        const tokenURI = await myContract.tokenURI(i);
+        const owner = await myContract.ownerOf((i))
+        list.push({ id: i, tokenURI: tokenURI, owner: owner })
+    }
+    res.json(list)
 
 })
 // console.log(process.env.PK)
@@ -32,9 +52,7 @@ app.post('/mint', async (req, res) => {
     const vKey = JSON.parse(fs.readFileSync(`build/verification_key.json`));
     const zkRes = await groth16.verify(vKey, req.body.publicSignals, req.body.proof);
     // res.send("done")
-    const privateKey = process.env.PK;
-    const lineaProvider = 'https://linea-goerli.infura.io/v3/75d20dcf6d4c4ad294404cdcd6c5408e';
-    const provider = new ethers.providers.JsonRpcProvider(lineaProvider);
+
     const ownerAccount = new ethers.Wallet(privateKey, provider);
     const contractAddress = "0xF989741E4A965A16a4606161E52aE98c78E440b4";
     const myContract = new ethers.Contract(contractAddress, ABI, ownerAccount);
